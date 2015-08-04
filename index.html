@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			
+			thead{
+				background-color: #ebebeb;
+			}
+			tbody,thead,td,tr,table{
+				border: 1px solid #eee;
+				border-collapse: collapse;
+			}
+			.Ytable{
+				width: 600px;
+				text-align: center;
+			}
+			.Ytable tr{
+				height: 30px;
+			}
+			.tanC{
+				display: none;
+				width: 560px;
+				position: absolute;
+				z-index: 999;
+				background-color: #fff;
+				box-shadow: 2px 2px 8px rgba(0, 0, 0,.3);
+			}
+			.tanC tr{
+				text-align: center;
+				height: 30px;
+			}
+			.tanC table{
+				width: 540px;
+				margin: 20px 10px;
+				background-color: #fff;
+			}
+		</style>
+	</head>
+	<body style="height: 2000px;">
+		<a href="javascript:;" class="add" id="add">添加</a>
+		<table class="Ytable">
+			<thead >
+				<tr>
+					<td>
+						姓名
+					</td>
+					<td>
+						年龄
+					</td>
+					<td>
+						班级
+					</td>
+					<td>
+						操作
+					</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						im
+					</td>
+					<td>
+						18
+					</td>
+					<td>
+						学前班
+					</td>
+					<td>
+						<a href="javascript:;" class="delete">删除</a><a href="javascript:;" class="moveUp">上移</a><a href="javascript:;" class="moveDown">下移</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						云响应
+					</td>
+					<td>
+						18
+					</td>
+					<td>
+						学前班
+					</td>
+					<td>
+						<a href="javascript:;" class="delete">删除</a><a href="javascript:;" class="moveUp">上移</a><a href="javascript:;" class="moveDown">下移</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						涛涛
+					</td>
+					<td>
+						183
+					</td>
+					<td>
+						学前班
+					</td>
+					<td>
+						<a href="javascript:;" class="delete">删除</a><a href="javascript:;" class="moveUp">上移</a><a href="javascript:;" class="moveDown">下移</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<!--弹窗-->
+		<div class="tanC">
+			<div>
+				<table>
+					<thead>
+						<tr>
+							<td>姓名</td>
+							<td>年龄</td>
+							<td>班级</td>
+						</tr>
+					</thead>
+					<tbody class="add-table">
+						<tr>
+							<td>
+								<input type="text" placeholder="姓名"/>
+							</td>
+							<td>
+								<input type="text" placeholder="年龄"/>
+							</td>
+							<td><input type="text" placeholder="班级"/></td>
+						</tr>
+					</tbody>
+				</table>
+				<a href="javascript:;" class="save">保存</a>
+				<a href="javascript:;" class="cancel">取消</a>
+			</div>
+		</div>
+		<script type="text/javascript" src="js/jquery-1.9.1.min.js" ></script>
+		<script>
+			$(".Ytable").delegate(".delete","click",function(){
+				$(this).parents("tr").remove();
+			});
+			$(".Ytable").delegate(".moveDown","click",function(){
+				var Danqian=$(this).parents("tr");
+				var index=$(this).parents("tr").index();
+				var len=$(this).parents("tbody").find("tr").length;
+				if(index==(len-1)){
+					alert("已经是最后一条数据了，不能再下移")
+				}else{
+					Danqian.next("tr").insertBefore(Danqian);//tr下移
+				}
+			});
+			$(".Ytable").delegate(".moveUp","click",function(){
+				var Danqian=$(this).parents("tr");
+				var index=$(this).parents("tr").index();
+				var len=$(this).parents("tbody").find("tr").length;
+				if(index==0){
+					alert("数据已经在最顶部了，不能再上移")
+				}else{
+					Danqian.prev("tr").insertAfter(Danqian);//tr上移
+				}
+			});
+//			$(".delete").click(function(){
+//				$(this).parents("tr").remove();
+//			});
+//			$(".moveDown").click(function(){
+//				var Danqian=$(this).parents("tr");
+//				var index=$(this).parents("tr").index();
+//				var len=$(this).parents("tbody").find("tr").length;
+//				if(index==(len-1)){
+//					alert("已经是最后一条数据了，不能再下移")
+//				}else{
+//					Danqian.next("tr").insertBefore(Danqian);//tr下移
+//				}
+//			});
+//			$(".moveUp").click(function(){
+//				var Danqian=$(this).parents("tr");
+//				var index=$(this).parents("tr").index();
+//				var len=$(this).parents("tbody").find("tr").length;
+//				if(index==0){
+//					alert("数据已经在最顶部了，不能再上移")
+//				}else{
+//					Danqian.prev("tr").insertAfter(Danqian);//tr上移
+//				}
+//			});
+			//弹出
+			$(".add").click(function(){
+				$(".tanC").show();
+			});
+			//弹窗居中
+			$(".tanC").css("left",($(window).width()-$(".tanC").outerWidth())/2);
+			$(".tanC").css("top",($(window).height()-$(".tanC").outerHeight())/2);
+			$(window).on("resize scroll",function(){
+				$(".tanC").css("left",($(window).width()-$(".tanC").outerWidth())/2);
+				$(".tanC").css("top",($(window).height()-$(".tanC").outerHeight())/2+$(window).scrollTop());
+			});
+			//保存数据
+			$(".save").click(function(){
+				var lenAdd=$(".add-table input").length;
+				var attrAdd=[];
+				var flag=true;
+				for(var i=0;i<lenAdd;i++){
+					if($(".add-table input").eq(i).val()==""){
+						flag=false;
+					}
+				}//判断是否全部为空
+				if(flag){
+					for(var i=0;i<lenAdd;i++){
+						attrAdd.push($(".add-table input").eq(i).val());
+					}
+					var addNew=$('<tr>sfgdfg<td>'+attrAdd[0]+'</td><td>'+attrAdd[1]+'</td><td>'+attrAdd[2]+'</td><td><a href="javascript:;" class="delete">删除</a><a href="javascript:;" class="moveUp">上移</a><a href="javascript:;" class="moveDown">下移</a></td></tr>')
+					$(".Ytable tbody").append(addNew);
+					$(".tanC").hide();
+					attrAdd=[];
+					$(".add-table input").val("");//清空输入框
+				}else{
+					alert("请全部填写完");
+				}
+				
+			});
+			$(".cancel").click(function(){
+				$(".tanC").hide();
+			});
+		</script>
+	</body>
+</html>
